@@ -1,0 +1,7 @@
+# Virtual environment directory
+venv/
+.venv/ 
+
+# debug_images
+/backend/debug_images/
+/backend/txt_files/
