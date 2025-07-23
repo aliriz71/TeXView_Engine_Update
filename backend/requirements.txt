@@ -1,0 +1,13 @@
+#
+# FILENAME: requirements.txt
+#
+# Libraries for pdfMaster_final.py
+pdf2image
+numpy
+opencv-python
+pytesseract
+python-dotenv
+google-generativeai
+
+# Pillow is also a dependency of easyocr, but usually gets installed automatically.
+Pillow
