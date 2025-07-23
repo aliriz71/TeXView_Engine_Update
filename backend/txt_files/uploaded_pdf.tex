@@ -1,0 +1,112 @@
+\documentclass{article}
+
+% --- PACKAGES ---
+% For character encoding and fonts
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% For page layout and margins
+\usepackage{geometry}
+
+% For graphics and figures
+\usepackage{graphicx}
+
+% For mathematical formulas (good practice)
+\usepackage{amsmath}
+
+% For clickable URLs and improved line breaking in URLs
+\usepackage{hyperref}
+\usepackage{xurl} % Allows line breaks at any character in a URL
+
+% --- DOCUMENT SETUP ---
+\geometry{a4paper, margin=1in} % Set page layout for A4 paper with 1-inch margins
+
+% Hyperref setup for nice, clickable links
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=teal, % Using teal for better readability than cyan
+    pdftitle={A Moore Machine Puzzle Game},
+    pdfauthor={Syed Ali Raza Rizvi},
+    bookmarks=true,
+    pdfpagemode=UseNone,
+}
+
+% --- TITLE AND AUTHOR ---
+\title{A Moore Machine Puzzle Game}
+\author{Syed Ali Raza Rizvi}
+\date{\today}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Project Description}
+
+Originally designed as a story game, this project was reworked into a puzzle game with two possible endings. The game is implemented as a Moore machine, with button inputs driving state transitions. The buttons A (\texttt{KEY0}) and B (\texttt{KEY1}) are used as a one-bit input (e.g., 1~=~A, 0~=~B). By using both of them in combination a one-bit-like input can be replicated.
+
+\section{Features}
+
+\subsection{\texttt{vga\_controller}}
+
+The \texttt{vga\_controller} module is used to output a 64x48 PNG image. It is modified from a GitHub source~[5]. A smaller size was chosen to maximize the amount of available space on the on-chip memory. The on-chip memory contains 240KB. To read a PNG, it needed to be converted to a \texttt{hex} file first; this was one of the described memory types compatible with the board as said in the user manual. Each pixel is converted to a hex character. Since all the images were drawn from \texttt{pixilart.com} by myself, we could choose the colours as well. Each image was created using a 4-bit color depth, which provides a total of 16 possible colors. This is why each pixel is a hex character; each letter from 0--F represents a colour. The method to convert the PNG was by using a Python script. With the \texttt{pillow} library, we can map each pixel to a hex character. Each \texttt{hex} file has 3072 lines (64x48 = 3072) and each line has a hex character. With this information, we can use \texttt{readmemh} to process memory at compilation. Each \texttt{hex} file is 8.99KB; we are limited to how many images we want to read.
+
+The horizontal and vertical counter for the VGA module is used to determine where and when we can display a pixel on the 640x480 resolution. We read the 1-pixel’s information from dividing the horizontal and vertical counter by 10 and multiplying the y counter by 64 (width). This ensures that each memory index of our image is read out in a 10x10 block to fit the 640x480 resolution. Each pixel read is also sent to the \texttt{get\_rgb} function to decode the hex character to its red, green, and blue colour.
+
+Additionally, the \texttt{hex} files are required to get the output. If they are saved in the project directory, we can access them easier.
+
+\subsection{\texttt{state\_machine\_controller}}
+
+The design was based off of a Moore machine design, combining both parts shown in Figure~\ref{fig:story} and Figure~\ref{fig:labyrinth}. Figure~\ref{fig:story} below, contains the more simple linear logic. Figure~\ref{fig:labyrinth} was more complicated since I wanted to make an immersive walking simulator: the labyrinth logic. We have input buttons \texttt{a} and \texttt{b} to progress through each state. The entire state machine is controlled by the two button inputs.
+
+The state changes from either \texttt{button\_a} or \texttt{button\_b} depending on my state diagram.
+
+The game has two endings; each of the endings loop back to the title page. The state machine works on a much slower clock than the \texttt{vga\_controller}. This is because the state changes if the buttons are held for a little bit. Therefore, I found a speed that is responsive enough for when we just press the button. This is shown in the video.
+
+The output for each state is different for the story parts. However, in the labyrinth part, I have some states that reuse images; this makes it seem like we are actually walking around the space, adding some immersion as some sort of a walking simulator.
+
+\begin{figure}[htbp]
+    \centering
+    % This is a placeholder for the actual figure.
+    % Replace the \fbox command with \includegraphics{figure_a.png}
+    \fbox{\rule{0pt}{4cm}\rule{0.8\linewidth}{0pt}}
+    \caption{Figure (a), story and riddle.}
+    \label{fig:story}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    % This is a placeholder for the actual figure.
+    % Replace the \fbox command with \includegraphics{figure_b.png}
+    \fbox{\rule{0pt}{4cm}\rule{0.8\linewidth}{0pt}}
+    \caption{Figure (b), labyrinth map.}
+    \label{fig:labyrinth}
+\end{figure}
+
+
+\section{Conclusion}
+
+This project demonstrates how to design a time-controlled state machine system using Verilog. By combining a state machine controller and a VGA output, the system is able to simulate a game-like experience with timed state transitions. The design is scalable, allowing for easy expansion of the number of states or changes in the clock division ratio to adjust the timing of button inputs. The labyrinth part of the game can also be its whole own game with a more complicated maze and intersection. I had the drawings finished for 3-way intersections; however, due to limited on-chip memory, I was only able to make a small proof-of-concept version while also sticking to making a story as described in the project proposal.
+
+% Using \clearpage to ensure the references start on a new page.
+\clearpage
+
+\section*{References and Sources}
+% Using thebibliography environment for better formatting of references.
+\begin{thebibliography}{9}
+
+\bibitem{de10lite} DE10-Lite User Manual. Available online: \url{https://ftp.intel.com/Public/Pub/fpqaup/pub/Intel_Material/Boards/DE10-Lite/DE10_Lite_User_Manual.pdf}
+
+\bibitem{vga_verilog} How to Create VGA Controller in Verilog on FPGA? | Xilinx FPGA Programming Tutorials. Available online: \url{https://www.youtube.com/watch?v=4enWoVHCykl&t=437s}
+
+\bibitem{vga_image_driver} VGA image driver (make a face) on an Intel FPGA. Available online: \url{https://www.youtube.com/watch?v=mR-eo7a4n5Q}
+
+\bibitem{rgb_codes} RGB Color Codes Chart. Available online: \url{https://www.rapidtables.com/web/color/RGB_Color.html}
+
+\bibitem{github_source} Dominic Meads, \textit{Quartus-Projects}. GitHub Repository. Available online: \url{https://github.com/dominic-meads/Quartus-Projects/blob/main/VGA_face/smiley_test.v}
+
+\end{thebibliography}
+
+\end{document}

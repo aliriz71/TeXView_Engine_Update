@@ -1,0 +1,137 @@
+Saved page 1 to debug_images\pdfConverted_001.jpg
+Annotated page 1, found 9 regions in debug_images\annotated_001.jpg
+Region 1 (y=398):
+aS
+────────────────────────────────────────
+Region 2 (y=447):
+ee
+\
+────────────────────────────────────────
+Region 3 (y=528):
+Syed Ali Raza Rizvi - //
+Project Description:
+
+Originally designed as a story game, this project was reworked into a puzzle game with
+two possible endings. The game is implemented as a Moore machine, with button inputs driving
+state transitions. The buttons A (KEY 0) and B (KEY1) are used as a one bit input (eg; 1 = A, 0
+= B). By using both of them in combination a one-bit-like input can be replicated.
+────────────────────────────────────────
+Region 4 (y=1024):
+Features:
+────────────────────────────────────────
+Region 5 (y=1158):
+vga_controller
+────────────────────────────────────────
+Region 6 (y=1228):
+The vga_controller module is used to output a 64x48 PNG image. It is modified from a
+github source[5]. A smaller size was chosen to maximize the amount of available space on the
+on-chip memory. The on-chip memory contains 240KB. To read a PNG, it needed to be
+converted to a hex file first, this was one of described memory types compatible with the board
+as said in the user manual. Each pixel is converted to a hex character, since all the images were
+drawn from pixilart.com by myself, we could choose the colours as well. Each image was
+created using a 4-bit color depth, which provides a total of 16 possible colors. This is why each
+pixel is a hex character, each letter from O-F represents a colour. The method to convert the
+PNG was by using a python script. With the pillow library, we can map each pixel to a hex
+character. Each hex file has 3072 lines (64x48 = 3072) and each line has a hex character. With
+this information, we can use readmemh to process memory at compilation. Each hex file is
+8.99KB, we are limited to how many images we want to read.
+────────────────────────────────────────
+Region 7 (y=2147):
+The horizontal and vertical counter for the vga module is used to determine where and
+when we can display a pixel on the 640x480 resolution. We read the 1 pixel’s information from
+dividing the horizontal and vertical counter by 10 and multiplying the y counter by 64(width).
+This ensures that each memory index of our image is read out in a 10x10 block to fit the
+640x480 resolution. Each pixel read is also sent to the get_rgb function to decode the hex
+────────────────────────────────────────
+Region 8 (y=2502):
+character to its red green and blue colour.
+Additionally, the hex files are required to get the output. If they are saved in the project directory
+we can access them easier.
+────────────────────────────────────────
+Region 9 (y=2772):
+state_machine_controller
+
+The design was based off of a Moore machine design, combining both parts in figure (a)
+and (b). In figure (a) below, contains the more simple linear logic. Figure (b) was more
+complicated since | wanted to make an immersive walking simulator. The labyrinth logic . We
+have input buttons a and b to progress through each state. The entire state machine is
+controlled by the two button inputs.
+The state changes from either button_a or button_b depending on my state diagram
+────────────────────────────────────────
+Saved page 2 to debug_images\pdfConverted_002.jpg
+Annotated page 2, found 4 regions in debug_images\annotated_002.jpg
+Region 1 (y=345):
+The game has two endings, each of the endings loop back to the title page. The state
+machine works on a much slower clock than the vga_controller. This is because the buttons
+pressed, changes between the states if held for a little bit. Therefore, | found a speed that is
+enough to be responsive for when we just press the button. This is shown in the video.
+────────────────────────────────────────
+Region 2 (y=686):
+The output for each state is different for the story parts. However in the labyrinth part, | have
+some states that reuse images, this makes it seem like we are actually walking around the
+space adding some immersion as some sort of a walking simulator.
+────────────────────────────────────────
+Region 3 (y=1030):
+Conclusion:
+────────────────────────────────────────
+Region 4 (y=1105):
+This project demonstrates how to design a time-controlled state machine system using
+Verilog. By combining a state machine controller and a vga output, the system is able to
+simulate a game-like experience with timed state transitions. The design is scalable, allowing for
+easy expansion of the number of states or changes in the clock division ratio to adjust the timing
+of button inputs. The labyrinth part of the game can also be its whole own game with a more
+complicated maze and intersection. | had the drawings finished for 3 way intersections, however
+due to limited on-chip memory, | was only able to make a small proof of concept version while
+also sticking to making a story as described in the project proposal.
+────────────────────────────────────────
+Saved page 3 to debug_images\pdfConverted_003.jpg
+Annotated page 3, found 3 regions in debug_images\annotated_003.jpg
+Region 1 (y=2035):
+Figure (a), story and riddle
+────────────────────────────────────────
+Region 2 (y=2370):
+End maze
+────────────────────────────────────────
+Region 3 (y=2971):
+—
+────────────────────────────────────────
+Saved page 4 to debug_images\pdfConverted_004.jpg
+Annotated page 4, found 10 regions in debug_images\annotated_004.jpg
+Region 1 (y=345):
+Figure (b), labyrinth map
+────────────────────────────────────────
+Region 2 (y=496):
+References
+────────────────────────────────────────
+Region 3 (y=497):
+and
+────────────────────────────────────────
+Region 4 (y=498):
+Sources
+────────────────────────────────────────
+Region 5 (y=616):
+[1] DE10-Lite User Manual
+https://ftp.intel.com/Public/Pub/fpqaup/pub/Intel_Material/Boards/DE10-Lite/DE10_ Lite User M
+anual. pdf
+────────────────────────────────────────
+Region 6 (y=898):
+[2]
+httos://www.youtube.com/watch?v=4enWoVHCykl&t=437s
+@ How to Create VGA Controller in Verilog on FPGA? | Xilinx FPGA Programming Tutorials
+────────────────────────────────────────
+Region 7 (y=1119):
+[3]
+https://www. youtube.com/watch?v=mR-eo7a4n5Q
+@ VGA image driver (make a face) on an Intel FPGA
+────────────────────────────────────────
+Region 8 (y=1410):
+[4] RGB Color Codes Chart
+https://www.rapidtables.com/web/color/RGB
+────────────────────────────────────────
+Region 9 (y=1480):
+Color.html
+────────────────────────────────────────
+Region 10 (y=1622):
+[5]
+https://github.com/dominic-meads/Quartus-Projects/blob/main/VGA_face/smiley_test.v
+────────────────────────────────────────
